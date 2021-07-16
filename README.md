@@ -4,7 +4,7 @@ Agility package to pull content from Agility instance via Fetch API.
 **Note:** Agility CMS .NET Fetch API does not include page management or URL redirections - this functionality exists in Agility CMS .NET Core repo https://github.com/agility/agilitycms-dotnet5-core
 
 # Setup
-1. Clone  Agility CMS .NET Fetch API rep at https://github.com/agility/agilitycms-dotnet5-fetch-api
+1. Clone  Agility CMS .NET Fetch API repo at https://github.com/agility/agilitycms-dotnet5-fetch-api
 2. Clone and configure Agility CMS .NET 5 Starter at https://github.com/agility/agilitycms-dotnet5-starter
 4. Open Agility CMS .NET 5 Starter and add the project  Agility CMS .NET Fetch API to your solution
 ![image](https://user-images.githubusercontent.com/6853592/125954842-08e47e9b-f244-4d6f-84d4-353bc9345903.png)
