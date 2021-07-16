@@ -1,6 +1,8 @@
 # agilitycms-dotnet5-fetch-api
 Agility package to pull content from Agility instance via Fetch API.
 
+**Note:** Agility CMS .NET Fetch API does not include page management or URL redirections - this functionality exists in Agility CMS .NET Core repo https://github.com/agility/agilitycms-dotnet5-core
+
 # Setup
 1. Clone  Agility CMS .NET Fetch API rep at https://github.com/agility/agilitycms-dotnet5-fetch-api
 2. Clone and configure Agility CMS .NET 5 Starter at https://github.com/agility/agilitycms-dotnet5-starter
@@ -12,18 +14,18 @@ Agility package to pull content from Agility instance via Fetch API.
 ![image](https://user-images.githubusercontent.com/6853592/125955314-6fbb290c-2752-4481-9b74-4dd976bb3d25.png)
 
 # Fetch API
-The following functions can be called using the Fetch API.
-Function | Parameters
-:--- | :--- 
-GetContentItem | ```GetItemParameters```
-GetContentList | ```GetListParameters```
-GetGallery | ```GetGalleryParameters```
-GetPage |  ```GetPageParameters```
-GetSitemapFlat | ```GetSitemapParameters```
-GetSitemapNested | ```GetSitemapParameters```
-GetUrlRedirections | ```GetUrlRedirectionsParameters```
-GetSyncContent | ```GetSyncParameters```
-GetSyncPages | ```GetSyncParameters```
+The Fetch API supports the following calls.
+Function | Parameters | Description
+:--- | :--- | :--- 
+GetContentItem | ```GetItemParameters``` | Get a single content item
+GetContentList | ```GetListParameters``` | Get a content list
+GetGallery | ```GetGalleryParameters``` | Get a gallery
+GetPage |  ```GetPageParameters``` | Get a page
+GetSitemapFlat | ```GetSitemapParameters``` | Get a flat sitemap
+GetSitemapNested | ```GetSitemapParameters``` | Get a nested sitemap
+GetUrlRedirections | ```GetUrlRedirectionsParameters``` | Get URL redirections
+GetSyncContent | ```GetSyncParameters``` | Grab all content using a sync token
+GetSyncPages | ```GetSyncParameters``` | Get all pages using a sync token
 
 ## Parameter Models
 ```
