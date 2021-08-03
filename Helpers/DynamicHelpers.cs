@@ -130,12 +130,20 @@ namespace Agility.NET5.FetchAPI.Helpers
         {
             try
             {
-                return JsonSerializer.Deserialize<T>(content, Constants.JsonSerializerOptions);
+                return JsonSerializer.Deserialize<T>(SanitizeContent(content), Constants.JsonSerializerOptions);
             }
             catch (Exception)
             {
                 return default;
             }
+        }
+
+        private static string SanitizeContent(string content)
+        {
+            var sanitizedContent = content;
+            sanitizedContent = sanitizedContent.Replace("\"true\"", "true");
+            sanitizedContent = sanitizedContent.Replace("\"false\"", "false");
+            return sanitizedContent;
         }
 
         public static List<ContentItemResponse<T>> DeserializeSyncItemsTo<T>(IList<ContentItem> contentItems,
