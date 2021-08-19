@@ -8,10 +8,10 @@
 	  <Authors>Daniel Karpienia</Authors>
 	  <Description>Agility package to pull content from Agility instance via Fetch API.</Description>
 	  <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-	  <Version>1.0.1</Version>
+	  <Version>1.0.2</Version>
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Agility.NET5.Shared" Version="1.0.0" />
+		<PackageReference Include="Agility.NET5.Shared" Version="1.0.1" />
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
