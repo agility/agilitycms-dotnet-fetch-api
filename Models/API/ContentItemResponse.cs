@@ -7,5 +7,6 @@ namespace Agility.NET5.FetchAPI.Models.API
         public int ContentID { get; set; }
         public Properties Properties { get; set; }
         public T Fields { get; set; }
+        public string ResponseMessage { get; set; }
     }
 }
