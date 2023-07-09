@@ -16,7 +16,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
-namespace Agility.NET.FetchAPI.Services
+namespace Agility.NET5.FetchAPI.Services
 {
 
     public class FetchApiService : IApiService
