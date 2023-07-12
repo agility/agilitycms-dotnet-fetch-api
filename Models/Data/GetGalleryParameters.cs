@@ -1,4 +1,4 @@
-﻿namespace Agility.NET5.FetchAPI.Models.Data
+﻿namespace Agility.NET.FetchAPI.Models.Data
 {
     public class GetGalleryParameters
     {

@@ -4,18 +4,21 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
-using Agility.NET5.FetchAPI.Helpers;
-using Agility.NET5.FetchAPI.Interfaces;
-using Agility.NET5.FetchAPI.Models.Data;
-using Agility.NET5.Shared.Models;
-using Agility.NET5.Shared.Util;
+using Agility.NET.FetchAPI.Helpers;
+using Agility.NET.FetchAPI.Interfaces;
+using Agility.NET.FetchAPI.Models.API;
+using Agility.NET.FetchAPI.Models.Data;
+using Agility.NET.Shared.Models;
+using Agility.NET.Shared.Util;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
+using System.Collections.Generic;
 
-namespace Agility.NET5.FetchAPI.Services
+namespace Agility.NET.FetchAPI.Services
 {
+
     public class FetchApiService : IApiService
     {
         private readonly HttpClient _httpClient;
@@ -31,6 +34,61 @@ namespace Agility.NET5.FetchAPI.Services
             _env = env;
             _httpClient.BaseAddress = new Uri($"{(_appSettings.InstanceGUID.EndsWith("-d") ? Constants.BaseUrlDev : Constants.BaseUrl)}/{appSettings.Value.InstanceGUID}");
             _httpClient.DefaultRequestHeaders.Add("accept", "application/json");
+        }
+
+        public async Task<ContentItemResponse<T>> GetTypedContentItem<T>(GetItemParameters getItemParameters)
+        {
+            try
+            {
+
+                var apiType = GetApiType();
+                SetApiKey();
+
+                if(getItemParameters.ContentLinkDepth > 0)
+                {
+                    return new ContentItemResponse<T>
+                    {
+                        ResponseMessage = "Content Link Depth for typed items must be 0"
+                    };
+                }
+            
+
+                var url =
+                    $@"{_httpClient.BaseAddress}/{apiType}/{getItemParameters.Locale}/item/{getItemParameters.ContentId}?contentLinkDepth={getItemParameters.ContentLinkDepth}";
+
+                if (getItemParameters.ExpandAllContentLinks)
+                {
+                    url += $@"&expandAllContentLinks={getItemParameters.ExpandAllContentLinks}";
+                }
+
+                var response = await _httpClient.GetAsync(url);
+
+                // Deserialize the content item to the specified generic type
+
+                if (!response.IsSuccessStatusCode) 
+                {
+                    return new ContentItemResponse<T>
+                    {
+                        ResponseMessage = "There was an error retrieving your content"
+                    };
+                }
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+
+                var deserializedItem = DynamicHelpers.DeserializeContentItemTo<T>(responseBody);
+
+                return deserializedItem;
+            }
+            catch (Exception ex)
+            {
+
+                return new ContentItemResponse<T>
+                {
+                    ResponseMessage = $"There was an error retrieving your content: {ex.Message}"
+                };
+                
+            }
         }
 
         public async Task<string> GetContentItem(GetItemParameters getItemParameters)
@@ -55,6 +113,85 @@ namespace Agility.NET5.FetchAPI.Services
             catch (Exception ex)
             {
                 return ReturnError(ex);
+            }
+        }
+        public async Task<ContentListResponse<T>> GetTypedContentList<T>(GetListParameters getListParameters)
+        {
+            try
+            {
+                var apiType = GetApiType();
+                SetApiKey();
+
+                if (getListParameters.ContentLinkDepth > 0)
+                {
+                    return new ContentListResponse<T>
+                    {
+                        ResponseMessage = "Content Link Depth for a typed list must be 0"
+                    };
+                }
+
+                var url = $@"{_httpClient.BaseAddress}/{apiType}/{getListParameters.Locale}/list/{getListParameters.ReferenceName}?ContentLinkDepth={getListParameters.ContentLinkDepth}";
+
+                if (!string.IsNullOrEmpty(getListParameters.Fields))
+                {
+                    url = UrlHelpers.AppendParameter(url, $@"Fields={HttpUtility.UrlEncode(getListParameters.Fields)}");
+                }
+
+                if (getListParameters.Take > 0)
+                {
+                    url = UrlHelpers.AppendParameter(url, $@"Take={getListParameters.Take}");
+                }
+
+                if (getListParameters.Skip > 0)
+                {
+                    url = UrlHelpers.AppendParameter(url, $@"Skip={getListParameters.Skip}");
+                }
+
+                if (!string.IsNullOrEmpty(getListParameters.Filter))
+                {
+                    url = UrlHelpers.AppendParameter(url, $@"Filter={HttpUtility.UrlEncode(getListParameters.Filter)}");
+                }
+
+                if (!string.IsNullOrEmpty(getListParameters.Sort))
+                {
+                    url = UrlHelpers.AppendParameter(url, $@"Sort={HttpUtility.UrlEncode(getListParameters.Sort)}");
+                }
+
+                if (!string.IsNullOrEmpty(getListParameters.Direction))
+                {
+                    url = UrlHelpers.AppendParameter(url, $@"Direction={HttpUtility.UrlEncode(getListParameters.Direction)}");
+                }
+
+                url = UrlHelpers.AppendParameter(url, $@"ContentLinkDepth={getListParameters.ContentLinkDepth}");
+
+                if (getListParameters.ExpandAllContentLinks)
+                {
+                    url = UrlHelpers.AppendParameter(url, $@"ExpandAllContentLinks={getListParameters.ExpandAllContentLinks}");
+                }
+
+                var response = await _httpClient.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new ContentListResponse<T>
+                    {
+                        ResponseMessage = "There was an error retrieving your content"
+                    };
+                }
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+                
+
+                var t = DynamicHelpers.DeserializeContentListTo<T>(responseBody);
+
+                return t;
+            }
+            catch (Exception ex)
+            {
+                return new ContentListResponse<T>
+                {
+                    ResponseMessage = $"There was an error retrieving your content: {ex.Message}"
+                };
             }
         }
 
@@ -135,6 +272,60 @@ namespace Agility.NET5.FetchAPI.Services
                 return ReturnError(ex);
             }
         }
+        
+        public async Task<PageResponse> GetTypedPage(GetPageParameters getPageParameters)
+        {
+            try
+            {
+                var apiType = GetApiType();
+                SetApiKey();
+
+                if (getPageParameters.ContentLinkDepth > 0)
+                {
+                    return new PageResponse
+                    {
+                        ResponseMessage = "Content Link Depth must be 0 for typed pages"
+                    };
+                }
+
+                var url =
+                    $@"{_httpClient.BaseAddress}/{apiType}/{getPageParameters.Locale}/page/{getPageParameters.PageId}?contentLinkDepth={getPageParameters.ContentLinkDepth}";
+
+                if (getPageParameters.ExpandAllContentLinks)
+                {
+                    url += $@"&expandAllContentLinks={getPageParameters.ExpandAllContentLinks}";
+                }
+
+                var response = await _httpClient.GetAsync(url);
+                
+                // Deserialize the content item to the specified generic type
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return new PageResponse
+                    {
+                        ResponseMessage = "There was an error retrieving your content"
+                    };
+                }
+
+                string responseBody = await response.Content.ReadAsStringAsync();
+
+                
+                var dynamicPageResponse = DynamicHelpers.DeserializeTo<PageResponseDynamicZone>(responseBody);
+                var pageResponse = new PageResponse(dynamicPageResponse);
+
+                return pageResponse;
+
+
+            }
+            catch (Exception ex)
+            {
+                return new PageResponse
+                {
+                    ResponseMessage = $"There was an error retrieving your content: {ex.Message}"
+                };
+            }
+        }
 
         public async Task<string> GetPage(GetPageParameters getPageParameters)
         {
@@ -161,7 +352,35 @@ namespace Agility.NET5.FetchAPI.Services
                 return ReturnError(ex);
             }
         }
+        public async Task<List<SitemapPage>> GetTypedSitemapFlat(GetSitemapParameters getSitemapParameters)
+        {
+            try
+            {
+                var apiType = GetApiType();
+                SetApiKey();
 
+
+                var url = $@"{_httpClient.BaseAddress}/{apiType}/{getSitemapParameters.Locale}/sitemap/flat/{getSitemapParameters.ChannelName}";
+
+                var response = await _httpClient.GetAsync(url);
+
+                if(!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+                var responseStr = await response.Content.ReadAsStringAsync();
+
+                var deserializedSitemap = DynamicHelpers.DeserializeSitemapFlat(responseStr);
+
+                return deserializedSitemap;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public async Task<string> GetSitemapFlat(GetSitemapParameters getSitemapParameters)
         {
             try
@@ -181,6 +400,35 @@ namespace Agility.NET5.FetchAPI.Services
             }
         }
 
+        public async Task<List<SitemapPage>> GetTypedSitemapNested(GetSitemapParameters getSitemapParameters)
+        {
+            try
+            {
+                var apiType = GetApiType();
+                SetApiKey();
+
+                var url = $@"{_httpClient.BaseAddress}/{apiType}/{getSitemapParameters.Locale}/sitemap/nested/{getSitemapParameters.ChannelName}";
+
+                var response = await _httpClient.GetAsync(url);
+
+                if (!response.IsSuccessStatusCode)
+                {
+                    return null;
+                }
+
+
+                var responseStr = await response.Content.ReadAsStringAsync();
+
+                var deserializedSitemap = DynamicHelpers.DeserializeSitemapNested(responseStr);
+
+                return deserializedSitemap;
+
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+        }
         public async Task<string> GetSitemapNested(GetSitemapParameters getSitemapParameters)
         {
             try
