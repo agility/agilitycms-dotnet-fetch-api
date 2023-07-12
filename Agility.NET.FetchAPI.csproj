@@ -1,9 +1,9 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	  <TargetFramework>net5.0</TargetFramework>
-	  <RootNamespace>Agility.NET5.FetchAPI</RootNamespace>
-	  <Product>Agility SDK .NET 5.0</Product>
+	  <TargetFramework>net7.0</TargetFramework>
+	  <RootNamespace>Agility.NET.FetchAPI</RootNamespace>
+	  <Product>Agility SDK .NET</Product>
 	  <Company>Agility CMS</Company>
 	  <Authors>Daniel Karpienia</Authors>
 	  <Description>Agility package to pull content from Agility instance via Fetch API.</Description>
@@ -11,12 +11,11 @@
 	  <Version>1.0.3</Version>
   </PropertyGroup>
 	<ItemGroup>
-		<PackageReference Include="Agility.NET5.Shared" Version="1.0.1" />
+		<PackageReference Include="Agility.NET.Shared" Version="1.0.1" />
 		<FrameworkReference Include="Microsoft.AspNetCore.App" />
 	</ItemGroup>
 	<ItemGroup>
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
 		<PackageReference Include="Microsoft.AspNetCore.Routing" Version="2.2.2" />
 	</ItemGroup>
-
 </Project>

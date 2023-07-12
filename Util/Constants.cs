@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace Agility.NET5.FetchAPI.Util
+namespace Agility.NET.FetchAPI.Util
 {
     public static class Constants
     {

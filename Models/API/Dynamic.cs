@@ -1,4 +1,4 @@
-﻿namespace Agility.NET5.FetchAPI.Models.API
+﻿namespace Agility.NET.FetchAPI.Models.API
 {
     public class Dynamic
     {

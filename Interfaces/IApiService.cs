@@ -1,9 +1,9 @@
 ﻿using System.Threading.Tasks;
-using Agility.NET5.FetchAPI.Models.Data;
-using Agility.NET5.FetchAPI.Models.API;
+using Agility.NET.FetchAPI.Models.Data;
+using Agility.NET.FetchAPI.Models.API;
 using System.Collections.Generic;
 
-namespace Agility.NET5.FetchAPI.Interfaces
+namespace Agility.NET.FetchAPI.Interfaces
 {
     public interface IApiService
     {

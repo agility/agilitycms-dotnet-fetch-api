@@ -4,19 +4,19 @@ using System.Net.Http;
 using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
-using Agility.NET5.FetchAPI.Helpers;
-using Agility.NET5.FetchAPI.Interfaces;
-using Agility.NET5.FetchAPI.Models.API;
-using Agility.NET5.FetchAPI.Models.Data;
-using Agility.NET5.Shared.Models;
-using Agility.NET5.Shared.Util;
+using Agility.NET.FetchAPI.Helpers;
+using Agility.NET.FetchAPI.Interfaces;
+using Agility.NET.FetchAPI.Models.API;
+using Agility.NET.FetchAPI.Models.Data;
+using Agility.NET.Shared.Models;
+using Agility.NET.Shared.Util;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
 
-namespace Agility.NET5.FetchAPI.Services
+namespace Agility.NET.FetchAPI.Services
 {
 
     public class FetchApiService : IApiService

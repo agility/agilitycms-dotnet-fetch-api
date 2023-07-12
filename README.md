@@ -8,9 +8,9 @@ Agility package to pull content from Agility instance via Fetch API.
 2. Clone and configure Agility CMS .NET 5 Starter at https://github.com/agility/agilitycms-dotnet5-starter
 4. Open Agility CMS .NET 5 Starter and add the project  Agility CMS .NET Fetch API to your solution
 ![image](https://user-images.githubusercontent.com/6853592/125954842-08e47e9b-f244-4d6f-84d4-353bc9345903.png)
-4. Finally add a dependency by right clicking 'Dependencies' under Agility.NET5.Starter
+4. Finally add a dependency by right clicking 'Dependencies' under Agility.NET.Starter
 ![image](https://user-images.githubusercontent.com/6853592/125955180-eebb9395-c807-48be-a355-6f32eff63b0c.png)
-5. Select 'Add Project Reference' and check Agility.NET5.FetchAPI
+5. Select 'Add Project Reference' and check Agility.NET.FetchAPI
 ![image](https://user-images.githubusercontent.com/6853592/125955314-6fbb290c-2752-4481-9b74-4dd976bb3d25.png)
 
 # Fetch API

@@ -1,4 +1,4 @@
-﻿namespace Agility.NET5.FetchAPI.Models
+﻿namespace Agility.NET.FetchAPI.Models
 {
     public static class Direction
     {

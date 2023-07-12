@@ -2,10 +2,10 @@
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Agility.NET5.FetchAPI.Util;
+using Agility.NET.FetchAPI.Util;
 using Microsoft.AspNetCore.Http;
 
-namespace Agility.NET5.FetchAPI.Helpers
+namespace Agility.NET.FetchAPI.Helpers
 {
     public static class HttpContextHelpers
     {

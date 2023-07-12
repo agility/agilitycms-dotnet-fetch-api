@@ -1,6 +1,6 @@
-﻿using Agility.NET5.Shared.Models;
+﻿using Agility.NET.Shared.Models;
 
-namespace Agility.NET5.FetchAPI.Models.API
+namespace Agility.NET.FetchAPI.Models.API
 {
     public class ContentItemResponse<T>
     {

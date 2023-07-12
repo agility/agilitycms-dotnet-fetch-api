@@ -1,8 +1,8 @@
-﻿using Agility.NET5.FetchAPI.Models.Data;
-using Agility.NET5.Shared.Models;
-using Agility.NET5.FetchAPI.Models.API;
+﻿using Agility.NET.FetchAPI.Models.Data;
+using Agility.NET.Shared.Models;
+using Agility.NET.FetchAPI.Models.API;
 
-namespace Agility.NET5.FetchAPI.Models
+namespace Agility.NET.FetchAPI.Models
 {
     public class ModuleModel
     {

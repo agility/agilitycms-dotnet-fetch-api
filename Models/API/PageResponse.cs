@@ -1,9 +1,9 @@
-﻿using Agility.NET5.Shared.Models;
+﻿using Agility.NET.Shared.Models;
 using NET5.FetchAPI.Models.API;
 using System.Collections.Generic;
 using Agility.NET.FetchAPI.Helpers;
 
-namespace Agility.NET5.FetchAPI.Models.API
+namespace Agility.NET.FetchAPI.Models.API
 {
     public class PageResponseDynamicZone
     {

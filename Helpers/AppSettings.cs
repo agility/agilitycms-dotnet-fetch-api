@@ -1,4 +1,4 @@
-﻿namespace Agility.NET5.FetchAPI.Helpers
+﻿namespace Agility.NET.FetchAPI.Helpers
 {
     public class AppSettings
     {

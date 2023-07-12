@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
-using Agility.NET5.FetchAPI.Models.API;
-using Agility.NET5.Shared.Models;
-using Agility.NET5.Shared.Util;
+using Agility.NET.FetchAPI.Models.API;
+using Agility.NET.Shared.Models;
+using Agility.NET.Shared.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using JsonSerializer = System.Text.Json.JsonSerializer;
 
-namespace Agility.NET5.FetchAPI.Helpers
+namespace Agility.NET.FetchAPI.Helpers
 {
     public static class DynamicHelpers
     {
