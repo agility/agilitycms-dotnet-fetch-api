@@ -15,6 +15,10 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Options;
 using System.Collections.Generic;
+using GraphQL;
+using GraphQL.Client.Http;
+using GraphQL.Client.Serializer.Newtonsoft;
+using System.Linq;
 
 namespace Agility.NET.FetchAPI.Services
 {
@@ -250,6 +254,46 @@ namespace Agility.NET.FetchAPI.Services
             {
                 return ReturnError(ex);
             }
+        }
+        public async Task<List<ContentItemResponse<T>>> GetContentByGraphQL<T>(GraphQLRequest query, string locale, string objName)
+        {
+            var apiType = GetApiType();
+            SetApiKey();
+
+            if(query == null || string.IsNullOrEmpty(query.Query))
+            {
+                return null;
+            }
+
+            // get the base address
+            var baseAddress = _httpClient.BaseAddress.AbsoluteUri.Replace(_httpClient.BaseAddress.AbsolutePath, "").Trim();
+
+            // build the url for graphql
+            var url = $"https://{baseAddress}/v1/{_appSettings.InstanceGUID}/{apiType}/en-us/graphql";
+
+            // get the api key from the http client
+            var apiKey = _httpClient.DefaultRequestHeaders.GetValues("APIKey").FirstOrDefault(); 
+
+            try
+            {
+                using (var graphQLHttpClient = new GraphQLHttpClient(url, new NewtonsoftJsonSerializer()))
+                {
+
+                    // set the api key in the internal gql http client
+                    graphQLHttpClient.HttpClient.DefaultRequestHeaders.Add("apikey", apiKey);
+
+                    var graphQLResponse = await graphQLHttpClient.SendQueryAsync<Dictionary<object, List<ContentItemResponse<T>>>>(query);
+
+                    var data = graphQLResponse.Data[objName];
+
+                    return data;
+                }
+            }catch(Exception ex)
+            {
+                Console.WriteLine(ex.ToString());
+                return null;
+            }
+
         }
 
         public async Task<string> GetGallery(GetGalleryParameters getGalleryParameters)
