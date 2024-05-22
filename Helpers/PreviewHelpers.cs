@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
-using Agility.NET.FetchAPI.Util;
-using Microsoft.AspNetCore.Http;
 
 namespace Agility.NET.FetchAPI.Helpers
 {

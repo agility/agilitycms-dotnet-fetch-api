@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net;
 using System.Net.Http;
-using System.Text.Json;
 using System.Threading.Tasks;
 using System.Web;
 using Agility.NET.FetchAPI.Helpers;
@@ -9,19 +8,13 @@ using Agility.NET.FetchAPI.Interfaces;
 using Agility.NET.FetchAPI.Models.API;
 using Agility.NET.FetchAPI.Models.Data;
 
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Options;
 using System.Collections.Generic;
-using GraphQL;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
-using System.Linq;
 using Agility.NET.FetchAPI.Util;
-using Agility.NET.FetchAPI.Models;
 using Agility.NET.FetchAPI.Exceptions;
-using System.Runtime.CompilerServices;
+
+using Microsoft.Extensions.Options;
 
 namespace Agility.NET.FetchAPI.Services
 {
@@ -29,21 +22,19 @@ namespace Agility.NET.FetchAPI.Services
 	public class FetchApiService : IApiService
 	{
 		private readonly HttpClient _httpClient;
-		private readonly IHttpContextAccessor _httpContextAccessor;
+
 		private readonly AppSettings _appSettings;
-		private readonly IWebHostEnvironment _env;
+
 
 		private Dictionary<string, GraphQLHttpClient> _previewGqlClients = new Dictionary<string, GraphQLHttpClient>();
 		private Dictionary<string, GraphQLHttpClient> _fetchGqlClients = new Dictionary<string, GraphQLHttpClient>();
 
-		public FetchApiService(HttpClient client, IOptions<AppSettings> appSettings, IWebHostEnvironment env, IHttpContextAccessor httpContextAccessor)
+
+		public FetchApiService(HttpClient client, IOptions<AppSettings> appSettings)
 		{
 			_httpClient = client;
-			_httpContextAccessor = httpContextAccessor;
 			_appSettings = appSettings.Value;
-			_env = env;
 			_httpClient.DefaultRequestHeaders.Add("accept", "application/json");
-
 		}
 
 
