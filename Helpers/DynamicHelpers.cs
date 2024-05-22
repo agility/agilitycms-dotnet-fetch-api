@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
+using Agility.NET.FetchAPI.Models;
 using Agility.NET.FetchAPI.Models.API;
-using Agility.NET.Shared.Models;
-using Agility.NET.Shared.Util;
+using Agility.NET.FetchAPI.Util;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
 using JsonSerializer = System.Text.Json.JsonSerializer;

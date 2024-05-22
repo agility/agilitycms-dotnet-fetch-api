@@ -4,17 +4,34 @@ namespace Agility.NET.FetchAPI.Util
 {
     public static class Constants
     {
-        public static readonly JsonSerializerOptions JsonSerializerOptions = Shared.Util.Constants.JsonSerializerOptions;
-        public static readonly string BaseUrl = Shared.Util.Constants.BaseUrl;
-        public static readonly string BaseUrlDev = Shared.Util.Constants.BaseUrlDev;
-        public static readonly string Fetch = Shared.Util.Constants.Fetch;
-        public static readonly string Preview = Shared.Util.Constants.Preview;
-        public static readonly string Live = Shared.Util.Constants.Live;
-        public static readonly string SitemapPagesKey = Shared.Util.Constants.SitemapPagesKey;
-        public static readonly string UrlRedirectionsResponseKey = Shared.Util.Constants.UrlRedirectionsResponseKey;
-        public static readonly string PageTypeFolder = Shared.Util.Constants.PageTypeFolder;
-        public static readonly string AgilityPreviewKeyName = Shared.Util.Constants.AgilityPreviewKeyName;
-        public static readonly string IsPreviewCookieName = Shared.Util.Constants.IsPreviewCookieName;
+        public static readonly JsonSerializerOptions JsonSerializerOptions = new JsonSerializerOptions { PropertyNameCaseInsensitive = true };
+
+        public static readonly string BaseUrl = "https://api.aglty.io";
+
+        public static readonly string BaseUrlDev = "https://api-dev.aglty.io";
+        public static readonly string BaseUrlCanada = "https://api-ca.aglty.io";
+        public static readonly string BaseUrlEurope = "https://api-eu.aglty.io";
+        public static readonly string BaseUrlAustrailia = "https://api-aus.aglty.io";
+        public static readonly string Fetch = "fetch";
+        public static readonly string Preview = "preview";
+        public static readonly string Live = "live";
+        public static readonly string SitemapPagesKey = "sitemapPages";
+        public static readonly string UrlRedirectionsResponseKey = "urlRedirectionsResponse";
+        public static readonly string PageTypeFolder = "folder";
+        public static readonly string AgilityPreviewKeyName = "agilitypreviewkey";
+        public static readonly string IsPreviewCookieName = "isPreview";
+
+        public const string Html = "html";
+        public const string Text = "text";
+        public const string CustomField = "customfield";
+        public const string DropDownList = "dropdownlist";
+        public const string LongText = "longtext";
+        public const string Boolean = "boolean";
+        public const string Link = "link";
+        public const string Content = "content";
+        public const string Date = "date";
+        public const string ImageAttachment = "imageattachment";
+        public const string Integer = "integer";
     }
 
 

@@ -1,20 +1,17 @@
 ﻿namespace Agility.NET.FetchAPI.Helpers
 {
-    public static class UrlHelpers
-    {
-        public static bool DoesUrlEndWithCharacter(string url, string character)
-        {
-            return url.EndsWith(character);
-        }
+	public static class UrlHelpers
+	{
+		public static string AppendParameter(string url, string parameter)
+		{
+			if (!url.Contains("?"))
+			{
+				//no query string yet
+				return $"{url}?{parameter}";
+			}
 
-        public static string AppendParameter(string url, string parameter)
-        {
-            if (DoesUrlEndWithCharacter(url, "?"))
-            {
-                return url + parameter;
-            }
-
-            return url + $@"&{parameter}";
-        }
-    }
+			//already has a query string
+			return $"{url}&{parameter}";
+		}
+	}
 }
