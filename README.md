@@ -2,7 +2,11 @@
 
 Agility package to pull content from Agility instance via Fetch API.
 
-**Note:** Agility CMS .NET Fetch API does not include page management or URL redirections - this functionality exists in Agility CMS .NET Core repo https://github.com/agility/agilitycms-dotnet-core
+> Updated for 2.0 and .Net 8
+
+- `IsPreview` is now a parameter set on EACH method call.
+- Added support for GraphQL Content Items.
+- Removed the `Shared` and `Core` projects, unifying into 1 assembly.
 
 # Setup
 
