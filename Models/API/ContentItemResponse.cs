@@ -8,6 +8,7 @@ namespace Agility.NET.FetchAPI.Models.API
     {
         public int ContentID { get; set; }
         public Properties? Properties { get; set; }
+        public SEO? SEO { get; set; }
         public T? Fields { get; set; }
 
     }
