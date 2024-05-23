@@ -9,6 +9,7 @@ using Agility.NET.FetchAPI.Models.Data;
 using Agility.NET.FetchAPI.Exceptions;
 using System.Web;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Agility.NET.FetchAPI.Services
 {
@@ -38,6 +39,13 @@ namespace Agility.NET.FetchAPI.Services
 
 
 				var graphQLResponse = await graphQLHttpClient.SendQueryAsync<Dictionary<object, List<ContentItemResponse<T>>>>(req);
+
+				//check for errors
+				if (graphQLResponse.Errors != null && graphQLResponse.Errors.Count() > 0)
+				{
+					var errors = string.Join(", ", graphQLResponse.Errors.Select(e => e.Message));
+					throw new AgilityResponseException($"There was one or more errors getting the content via GraphQL: {errors}");
+				}
 
 				var data = graphQLResponse.Data[objName];
 

@@ -57,11 +57,11 @@ namespace Agility.NET.FetchAPI.Services
 			}
 
 			//create the client only if we need to
-			var url = $"https://{baseUrl}/v1/{_appSettings.InstanceGUID}/fetch/en-us/graphql";
+			var url = $"{baseUrl}/v1/{_appSettings.InstanceGUID}/fetch/en-us/graphql";
 
 			if (isPreview)
 			{
-				url = $"https://{baseUrl}/v1/{_appSettings.InstanceGUID}/preview/en-us/graphql";
+				url = $"{baseUrl}/v1/{_appSettings.InstanceGUID}/preview/en-us/graphql";
 
 			}
 
