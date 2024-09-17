@@ -5,10 +5,10 @@
 		<RootNamespace>Agility.NET.FetchAPI</RootNamespace>
 		<Product>Agility SDK .NET</Product>
 		<Company>Agility CMS</Company>
-		<Authors>Joel Varty, Kevin Tran</Authors>
+		<Authors>Joel Varty, Kevin Tran, Mohit Vashishtha</Authors>
 		<Description>Agility package to pull content from Agility instance via Fetch API.</Description>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Version>2.0.0</Version>
+		<Version>2.1.0</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="GraphQL.Client" Version="6.0.0" />
