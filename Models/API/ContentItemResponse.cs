@@ -1,4 +1,6 @@
-﻿using Agility.NET.Shared.Models;
+﻿
+
+#nullable enable
 
 namespace Agility.NET.FetchAPI.Models.API
 {
@@ -6,7 +8,8 @@ namespace Agility.NET.FetchAPI.Models.API
     {
         public int ContentID { get; set; }
         public Properties? Properties { get; set; }
-        public T Fields { get; set; }
-        public string? ResponseMessage { get; set; }
+        public SEO? SEO { get; set; }
+        public T? Fields { get; set; }
+
     }
 }

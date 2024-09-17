@@ -2,6 +2,7 @@
 {
     public class GetListParameters
     {
+        public bool IsPreview { get; set; }
         public string Locale { get; set; }
         public string ReferenceName { get; set; }
         public string Fields { get; set; }

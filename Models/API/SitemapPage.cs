@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using Agility.NET.Shared.Models;
 
 namespace Agility.NET.FetchAPI.Models.API
 {

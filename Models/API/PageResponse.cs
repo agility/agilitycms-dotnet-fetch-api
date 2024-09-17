@@ -1,6 +1,4 @@
-﻿using Agility.NET.Shared.Models;
-using NET5.FetchAPI.Models.API;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using Agility.NET.FetchAPI.Helpers;
 
 namespace Agility.NET.FetchAPI.Models.API
@@ -66,7 +64,6 @@ namespace Agility.NET.FetchAPI.Models.API
         public bool IsDynamicPage { get; set; }
         public Properties Properties { get; set; }
         public List<ContentZone> Zones { get; set; }
-        public string ResponseMessage { get; set; }
 
     }
 }

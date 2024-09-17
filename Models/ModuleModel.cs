@@ -1,5 +1,4 @@
-﻿using Agility.NET.FetchAPI.Models.Data;
-using Agility.NET.Shared.Models;
+﻿
 using Agility.NET.FetchAPI.Models.API;
 
 namespace Agility.NET.FetchAPI.Models

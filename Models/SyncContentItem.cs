@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
-using Agility.NET.FetchAPI.Models;
 
-namespace NET5.FetchAPI.Models.API
+namespace Agility.NET.FetchAPI.Models
 {
-    public class SyncContentItemResponse
+    public class SyncContentItem
     {
         public long SyncToken { get; set; }
         public List<ContentItem> Items { get; set; }
