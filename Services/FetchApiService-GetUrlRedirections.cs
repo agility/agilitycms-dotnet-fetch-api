@@ -30,7 +30,7 @@ namespace Agility.NET.FetchAPI.Services
 
 				if (getUrlRedirectionsParameters.LastAccessDate != null)
 				{
-					var date = getUrlRedirectionsParameters.LastAccessDate.Value.ToString("o");
+					var date = getUrlRedirectionsParameters.LastAccessDate.Value.ToString("yyyy-MM-ddTHH:mm:ss.ffK");
 					url = UrlHelpers.AppendParameter(url, $"lastAccessDate={HttpUtility.UrlEncode(date)}");
 				}
 
