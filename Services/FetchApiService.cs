@@ -100,15 +100,15 @@ namespace Agility.NET.FetchAPI.Services
 			{
 				baseUrl = Constants.BaseUrlDev;
 			}
-			else if (_appSettings.InstanceGUID.EndsWith("-ca"))
+			else if (_appSettings.InstanceGUID.EndsWith("-c"))
 			{
 				baseUrl = Constants.BaseUrl;
 			}
-			else if (_appSettings.InstanceGUID.EndsWith("-eu"))
+			else if (_appSettings.InstanceGUID.EndsWith("-e"))
 			{
 				baseUrl = Constants.BaseUrlEurope;
 			}
-			else if (_appSettings.InstanceGUID.EndsWith("-aus"))
+			else if (_appSettings.InstanceGUID.EndsWith("-a"))
 			{
 				baseUrl = Constants.BaseUrlAustrailia;
 			}
