@@ -102,7 +102,7 @@ namespace Agility.NET.FetchAPI.Services
 			}
 			else if (_appSettings.InstanceGUID.EndsWith("-c"))
 			{
-				baseUrl = Constants.BaseUrl;
+				baseUrl = Constants.BaseUrlCanada;
 			}
 			else if (_appSettings.InstanceGUID.EndsWith("-e"))
 			{

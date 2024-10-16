@@ -8,7 +8,7 @@
 		<Authors>Joel Varty, Kevin Tran, Mohit Vashishtha</Authors>
 		<Description>Agility package to pull content from Agility instance via Fetch API.</Description>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Version>2.2.0</Version>
+		<Version>2.3.0</Version>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageReference Include="GraphQL.Client" Version="6.0.0" />
