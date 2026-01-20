@@ -12,6 +12,7 @@ namespace Agility.NET.FetchAPI.Util
         public static readonly string BaseUrlCanada = "https://api-ca.aglty.io";
         public static readonly string BaseUrlEurope = "https://api-eu.aglty.io";
         public static readonly string BaseUrlAustrailia = "https://api-aus.aglty.io";
+        public static readonly string BaseUrlUSA2 = "https://api-usa2.aglty.io";
         public static readonly string Fetch = "fetch";
         public static readonly string Preview = "preview";
         public static readonly string Live = "live";

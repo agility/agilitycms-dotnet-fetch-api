@@ -112,6 +112,10 @@ namespace Agility.NET.FetchAPI.Services
 			{
 				baseUrl = Constants.BaseUrlAustrailia;
 			}
+			else if (_appSettings.InstanceGUID.EndsWith("-us2"))
+			{
+				baseUrl = Constants.BaseUrlUSA2;
+			}
 
 			return baseUrl;
 		}
