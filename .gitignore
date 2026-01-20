@@ -3,3 +3,7 @@ bin/
 obj/
 .vs/
 .claude/
+
+# Test settings with secrets
+*.runsettings
+!*.runsettings.template
