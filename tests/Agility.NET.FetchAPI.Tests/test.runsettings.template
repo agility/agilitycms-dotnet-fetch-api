@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Copy this file to test.runsettings and fill in your credentials -->
+<RunSettings>
+  <RunConfiguration>
+    <EnvironmentVariables>
+      <AGILITY_INSTANCE_GUID>your-instance-guid</AGILITY_INSTANCE_GUID>
+      <AGILITY_FETCH_API_KEY>your-fetch-api-key</AGILITY_FETCH_API_KEY>
+      <AGILITY_PREVIEW_API_KEY>your-preview-api-key</AGILITY_PREVIEW_API_KEY>
+    </EnvironmentVariables>
+  </RunConfiguration>
+</RunSettings>
