@@ -263,10 +263,26 @@ var result = await _agilityService.GetContentByGraphQL(query, isPreview: false);
    dotnet build
    ```
 
-4. Run tests:
+4. Configure test credentials:
    ```bash
-   dotnet test
+   cp tests/Agility.NET.FetchAPI.Tests/test.runsettings.template tests/Agility.NET.FetchAPI.Tests/test.runsettings
    ```
+   Edit `test.runsettings` with your Agility credentials.
+
+5. Run tests:
+   ```bash
+   dotnet test --settings tests/Agility.NET.FetchAPI.Tests/test.runsettings
+   ```
+
+## CI/CD
+
+This project uses GitHub Actions for continuous integration. To run tests in CI, configure the following repository secrets:
+
+| Secret | Description |
+|--------|-------------|
+| `AGILITY_INSTANCE_GUID` | Your Agility CMS instance GUID |
+| `AGILITY_FETCH_API_KEY` | API key for fetch (live) mode |
+| `AGILITY_PREVIEW_API_KEY` | API key for preview mode |
 
 ## Integration with Agility .NET Starter
 
