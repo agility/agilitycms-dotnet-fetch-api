@@ -1,0 +1,41 @@
+name: CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Setup .NET 10
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '10.0.x'
+
+    - name: Restore dependencies
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --no-restore -c Release
+
+    - name: Test
+      run: dotnet test --no-build -c Release --verbosity normal
+      env:
+        AGILITY_INSTANCE_GUID: ${{ secrets.AGILITY_INSTANCE_GUID }}
+        AGILITY_FETCH_API_KEY: ${{ secrets.AGILITY_FETCH_API_KEY }}
+        AGILITY_PREVIEW_API_KEY: ${{ secrets.AGILITY_PREVIEW_API_KEY }}
+
+    - name: Pack
+      run: dotnet pack src/Agility.NET.FetchAPI/Agility.NET.FetchAPI.csproj -c Release --no-build
+
+    - name: Upload NuGet package
+      uses: actions/upload-artifact@v4
+      with:
+        name: nuget-package
+        path: src/Agility.NET.FetchAPI/bin/Release/*.nupkg

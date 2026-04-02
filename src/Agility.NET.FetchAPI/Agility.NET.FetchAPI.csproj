@@ -1,0 +1,28 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<RootNamespace>Agility.NET.FetchAPI</RootNamespace>
+		<Product>Agility SDK .NET</Product>
+		<Company>Agility CMS</Company>
+		<Authors>Joel Varty, Kevin Tran, Mohit Vashishtha</Authors>
+		<Description>Agility package to pull content from Agility instance via Fetch API.</Description>
+		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+		<Version>3.0.0</Version>
+		<PackageId>Agility.NET.FetchAPI</PackageId>
+		<PackageLicenseExpression>MIT</PackageLicenseExpression>
+		<PackageProjectUrl>https://github.com/agility/agilitycms-dotnet-fetch-api</PackageProjectUrl>
+		<RepositoryUrl>https://github.com/agility/agilitycms-dotnet-fetch-api</RepositoryUrl>
+		<PackageTags>agility;cms;headless;content;fetch;api</PackageTags>
+		<PackageReadmeFile>README.md</PackageReadmeFile>
+	</PropertyGroup>
+	<ItemGroup>
+		<None Include="..\..\README.md" Pack="true" PackagePath="\"/>
+	</ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="GraphQL.Client" Version="6.1.0" />
+		<PackageReference Include="GraphQL.Client.Serializer.Newtonsoft" Version="6.1.0" />
+		<PackageReference Include="Microsoft.Extensions.Options" Version="10.0.2" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
+	</ItemGroup>
+</Project>
