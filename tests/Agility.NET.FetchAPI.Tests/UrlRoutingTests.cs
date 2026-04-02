@@ -52,6 +52,6 @@ public class UrlRoutingTests
     [InlineData("abc123-us2", "-us2")]
     public void InstanceGUID_EndsWithExpectedSuffix(string guid, string expectedSuffix)
     {
-        Assert.True(guid.EndsWith(expectedSuffix));
+        Assert.EndsWith(expectedSuffix, guid);
     }
 }
