@@ -8,7 +8,7 @@
 		<Authors>Joel Varty, Kevin Tran, Mohit Vashishtha</Authors>
 		<Description>Agility package to pull content from Agility instance via Fetch API.</Description>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Version>3.0.0</Version>
+		<Version>3.0.1</Version>
 		<PackageId>Agility.NET.FetchAPI</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/agility/agilitycms-dotnet-fetch-api</PackageProjectUrl>
