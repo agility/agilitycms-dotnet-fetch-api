@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -8,7 +8,9 @@ using Agility.NET.FetchAPI.Interfaces;
 using Agility.NET.FetchAPI.Models.API;
 using Agility.NET.FetchAPI.Models.Data;
 
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Reflection;
 using GraphQL.Client.Http;
 using GraphQL.Client.Serializer.Newtonsoft;
 using Agility.NET.FetchAPI.Util;
@@ -26,8 +28,12 @@ namespace Agility.NET.FetchAPI.Services
 		private readonly AppSettings _appSettings;
 
 
-		private Dictionary<string, GraphQLHttpClient> _previewGqlClients = new Dictionary<string, GraphQLHttpClient>();
-		private Dictionary<string, GraphQLHttpClient> _fetchGqlClients = new Dictionary<string, GraphQLHttpClient>();
+		// One GraphQL client per locale, shared by concurrent requests.
+		private readonly ConcurrentDictionary<string, GraphQLHttpClient> _previewGqlClients = new ConcurrentDictionary<string, GraphQLHttpClient>(StringComparer.OrdinalIgnoreCase);
+		private readonly ConcurrentDictionary<string, GraphQLHttpClient> _fetchGqlClients = new ConcurrentDictionary<string, GraphQLHttpClient>(StringComparer.OrdinalIgnoreCase);
+
+		/// <summary>This SDK's name and version, sent as X-Agility-SDK (and in the User-Agent) so the API can recognise it.</summary>
+		internal static readonly string SdkProduct = $"agility-fetch-sdk-dotnet/{ReadSdkVersion()}";
 
 
 		public FetchApiService(HttpClient client, IOptions<AppSettings> appSettings)
@@ -35,6 +41,16 @@ namespace Agility.NET.FetchAPI.Services
 			_httpClient = client;
 			_appSettings = appSettings.Value;
 			_httpClient.DefaultRequestHeaders.Add("accept", "application/json");
+			_httpClient.DefaultRequestHeaders.TryAddWithoutValidation("X-Agility-SDK", SdkProduct);
+			_httpClient.DefaultRequestHeaders.TryAddWithoutValidation("User-Agent", SdkProduct);
+		}
+
+		private static string ReadSdkVersion()
+		{
+			var version = typeof(FetchApiService).Assembly
+				.GetCustomAttribute<AssemblyInformationalVersionAttribute>()?.InformationalVersion ?? "0.0.0";
+			var plus = version.IndexOf('+');
+			return plus >= 0 ? version.Substring(0, plus) : version;
 		}
 
 
@@ -46,31 +62,22 @@ namespace Agility.NET.FetchAPI.Services
 		private GraphQLHttpClient GetGraphQLClient(string locale, bool isPreview)
 		{
 
-			string baseUrl = GetBaseUrl();
+			if (string.IsNullOrWhiteSpace(locale))
+			{
+				throw new ArgumentException("A locale is required for GraphQL.", nameof(locale));
+			}
 
 			var dictionary = isPreview ? _previewGqlClients : _fetchGqlClients;
 
-			if (dictionary.ContainsKey(locale))
+			return dictionary.GetOrAdd(locale, key =>
 			{
-				//use the existing client if we've already got it ready...
-				return dictionary[locale];
-			}
+				// The GraphQL endpoint is per locale: /v1/{guid}/{fetch|preview}/{locale}/graphql.
+				var apiType = isPreview ? Constants.Preview : Constants.Fetch;
+				var url = $"{GetBaseUrl()}/v1/{_appSettings.InstanceGUID}/{apiType}/{Uri.EscapeDataString(key.ToLowerInvariant())}/graphql";
 
-			//create the client only if we need to
-			var url = $"{baseUrl}/v1/{_appSettings.InstanceGUID}/fetch/en-us/graphql";
-
-			if (isPreview)
-			{
-				url = $"{baseUrl}/v1/{_appSettings.InstanceGUID}/preview/en-us/graphql";
-
-			}
-
-			var client = new GraphQLHttpClient(url, new NewtonsoftJsonSerializer());
-
-			//stash it in the dictionary so we can use it for later requests
-			dictionary[locale] = client;
-
-			return client;
+				// Share the service's HttpClient, so DI-configured handlers and headers apply to GraphQL too.
+				return new GraphQLHttpClient(new GraphQLHttpClientOptions { EndPoint = new Uri(url) }, new NewtonsoftJsonSerializer(), _httpClient);
+			});
 
 		}
 
@@ -123,9 +130,15 @@ namespace Agility.NET.FetchAPI.Services
 
 		private static async Task<string> EnsureSuccessResult(HttpResponseMessage response)
 		{
-			if (response.StatusCode != HttpStatusCode.OK) throw new ApplicationException($"HttpException: {response.StatusCode} - {response.ReasonPhrase}");
-
 			var result = await response.Content.ReadAsStringAsync();
+			if (response.StatusCode != HttpStatusCode.OK)
+			{
+				// Keep the API's own error text: it usually says what's wrong (bad key, unknown reference name...).
+				var detail = string.IsNullOrWhiteSpace(result) ? "" : $": {(result.Length > 1000 ? result.Substring(0, 1000) : result)}";
+				// The message starts exactly as in 3.0 so callers matching on it keep working.
+				throw new ApplicationException($"HttpException: {response.StatusCode} - {response.ReasonPhrase} ({(int)response.StatusCode} {response.RequestMessage?.Method} {response.RequestMessage?.RequestUri?.AbsolutePath}){detail}");
+			}
+
 			return result;
 		}
 

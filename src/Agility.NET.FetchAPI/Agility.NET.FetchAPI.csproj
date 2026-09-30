@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
 	<PropertyGroup>
 		<TargetFramework>net10.0</TargetFramework>
@@ -8,13 +8,20 @@
 		<Authors>Joel Varty, Kevin Tran, Mohit Vashishtha</Authors>
 		<Description>Agility package to pull content from Agility instance via Fetch API.</Description>
 		<GeneratePackageOnBuild>false</GeneratePackageOnBuild>
-		<Version>3.0.1</Version>
+		<Version>3.1.0</Version>
 		<PackageId>Agility.NET.FetchAPI</PackageId>
 		<PackageLicenseExpression>MIT</PackageLicenseExpression>
 		<PackageProjectUrl>https://github.com/agility/agilitycms-dotnet-fetch-api</PackageProjectUrl>
 		<RepositoryUrl>https://github.com/agility/agilitycms-dotnet-fetch-api</RepositoryUrl>
 		<PackageTags>agility;cms;headless;content;fetch;api</PackageTags>
 		<PackageReadmeFile>README.md</PackageReadmeFile>
+		<PackageReleaseNotes>See https://github.com/agility/agilitycms-dotnet-fetch-api/blob/main/CHANGELOG.md</PackageReleaseNotes>
+		<PublishRepositoryUrl>true</PublishRepositoryUrl>
+		<EmbedUntrackedSources>true</EmbedUntrackedSources>
+		<IncludeSymbols>true</IncludeSymbols>
+		<SymbolPackageFormat>snupkg</SymbolPackageFormat>
+		<Deterministic>true</Deterministic>
+		<ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
 	</PropertyGroup>
 	<ItemGroup>
 		<None Include="..\..\README.md" Pack="true" PackagePath="\"/>
