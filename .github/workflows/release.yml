@@ -1,0 +1,57 @@
+name: Release
+
+# Publishes Agility.NET.FetchAPI to NuGet when a version tag is pushed, e.g. v3.1.0 or v3.2.0-beta.1.
+# The tag must match <Version> in src/Agility.NET.FetchAPI/Agility.NET.FetchAPI.csproj.
+#
+# Uses NuGet Trusted Publishing (OIDC): no API key is stored. The nuget.org policy (owner Agility-Inc) allows
+# this repository's release.yml in the "nuget" environment to push new versions of Agility.NET.FetchAPI only.
+# The environment accepts only v* tags and waits for a reviewer's approval.
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    environment: nuget
+    env:
+      CI: true
+      DOTNET_NOLOGO: true
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Check the tag matches the project version
+        run: |
+          version=$(dotnet msbuild src/Agility.NET.FetchAPI/Agility.NET.FetchAPI.csproj -getProperty:Version)
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME doesn't match project version $version."
+            exit 1
+          fi
+
+      - name: Build and test
+        run: |
+          dotnet build -c Release
+          dotnet test --no-build -c Release
+        env:
+          AGILITY_INSTANCE_GUID: ${{ secrets.AGILITY_INSTANCE_GUID }}
+          AGILITY_FETCH_API_KEY: ${{ secrets.AGILITY_FETCH_API_KEY }}
+          AGILITY_PREVIEW_API_KEY: ${{ secrets.AGILITY_PREVIEW_API_KEY }}
+
+      - name: Pack
+        run: dotnet pack src/Agility.NET.FetchAPI/Agility.NET.FetchAPI.csproj --no-build -c Release -o artifacts
+
+      - name: Get a short-lived NuGet API key
+        id: nuget
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Push
+        run: dotnet nuget push "artifacts/*.nupkg" --api-key "${{ steps.nuget.outputs.NUGET_API_KEY }}" --source https://api.nuget.org/v3/index.json --skip-duplicate

@@ -24,7 +24,7 @@ dotnet add package Agility.NET.FetchAPI
 Or add to your `.csproj`:
 
 ```xml
-<PackageReference Include="Agility.NET.FetchAPI" Version="3.0.0" />
+<PackageReference Include="Agility.NET.FetchAPI" Version="3.1.0" />
 ```
 
 ## Requirements
@@ -125,17 +125,19 @@ The SDK automatically routes requests to the correct regional endpoint based on 
 | `GetUrlRedirections` | `GetUrlRedirectionsParameters` | Get URL redirections |
 | `GetSyncContent` | `GetSyncParameters` | Sync all content using a sync token |
 | `GetSyncPages` | `GetSyncParameters` | Sync all pages using a sync token |
-| `GetContentByGraphQL` | GraphQL query | Query content using GraphQL |
+| `GetContentByGraphQL<T>` | query, locale, object name, preview | Query content using GraphQL |
 
 ### Typed Methods
 
-The SDK also provides typed/generic versions of the main methods for strongly-typed responses:
+The SDK also provides typed versions of the main methods:
 
-- `GetTypedContentItem<T>`
-- `GetTypedContentList<T>`
-- `GetTypedPage<T>`
-- `GetTypedSitemapFlat<T>`
-- `GetTypedSitemapNested<T>`
+| Method | Returns |
+|:-------|:--------|
+| `GetTypedContentItem<T>` | `ContentItemResponse<T>`, with your fields class as `T` |
+| `GetTypedContentList<T>` | `ContentListResponse<T>` |
+| `GetTypedPage` | `PageResponse` |
+| `GetTypedSitemapFlat` | `List<SitemapPage>` |
+| `GetTypedSitemapNested` | `List<SitemapPage>` |
 
 ## Parameter Models
 
@@ -229,7 +231,8 @@ public class GetSyncParameters
 
 ## GraphQL Support
 
-Query content using GraphQL for more flexible data retrieval:
+Query content using GraphQL for more flexible data retrieval. Pass the locale to query and the name of the top-level
+object to return; `T` is the class for each item's fields:
 
 ```csharp
 var query = @"
@@ -243,8 +246,12 @@ var query = @"
     }
 }";
 
-var result = await _agilityService.GetContentByGraphQL(query, isPreview: false);
+List<ContentItemResponse<PostFields>> posts =
+    await _agilityService.GetContentByGraphQL<PostFields>(query, "en-us", "posts", isPreview: false);
 ```
+
+Each locale has its own GraphQL endpoint (`/v1/{guid}/{fetch|preview}/{locale}/graphql`); versions before 3.1.0
+always queried `en-us`.
 
 ## Development Setup
 
@@ -274,15 +281,29 @@ var result = await _agilityService.GetContentByGraphQL(query, isPreview: false);
    dotnet test --settings tests/Agility.NET.FetchAPI.Tests/test.runsettings
    ```
 
+## Requests
+
+Every request sends `X-Agility-SDK: agility-fetch-sdk-dotnet/<version>` (also used as the User-Agent), so the API
+can tell SDK traffic apart. A non-200 response throws an `ApplicationException` (wrapped in
+`AgilityResponseException`) whose message starts `HttpException: {status} - {reason}` and includes the API's response.
+
 ## CI/CD
 
-This project uses GitHub Actions for continuous integration. To run tests in CI, configure the following repository secrets:
+This project uses GitHub Actions. The *CI* workflow builds, tests and packs every pull request and push to `main`.
+Its tests call a real instance, so configure these repository secrets:
 
 | Secret | Description |
 |--------|-------------|
 | `AGILITY_INSTANCE_GUID` | Your Agility CMS instance GUID |
 | `AGILITY_FETCH_API_KEY` | API key for fetch (live) mode |
 | `AGILITY_PREVIEW_API_KEY` | API key for preview mode |
+
+### Releasing
+
+1. Set `<Version>` in `src/Agility.NET.FetchAPI/Agility.NET.FetchAPI.csproj` and add a `CHANGELOG.md` entry.
+2. Merge to `main`, then tag it: `git tag v3.1.0 && git push origin v3.1.0`.
+3. The *Release* workflow checks that the tag matches the version, builds, tests, packs, and (after approval in the
+   `nuget` environment) publishes to NuGet with Trusted Publishing: no API key is stored anywhere.
 
 ## Integration with Agility .NET Starter
 

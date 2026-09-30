@@ -6,15 +6,21 @@ on:
   pull_request:
     branches: [ main ]
 
+permissions:
+  contents: read
+
 jobs:
   build-and-test:
     runs-on: ubuntu-latest
+    env:
+      CI: true
+      DOTNET_NOLOGO: true
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v7
 
     - name: Setup .NET 10
-      uses: actions/setup-dotnet@v4
+      uses: actions/setup-dotnet@v6
       with:
         dotnet-version: '10.0.x'
 
@@ -24,6 +30,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore -c Release
 
+    # The live tests need the AGILITY_* secrets; pull requests from forks don't get them.
     - name: Test
       run: dotnet test --no-build -c Release --verbosity normal
       env:
@@ -32,10 +39,10 @@ jobs:
         AGILITY_PREVIEW_API_KEY: ${{ secrets.AGILITY_PREVIEW_API_KEY }}
 
     - name: Pack
-      run: dotnet pack src/Agility.NET.FetchAPI/Agility.NET.FetchAPI.csproj -c Release --no-build
+      run: dotnet pack src/Agility.NET.FetchAPI/Agility.NET.FetchAPI.csproj -c Release --no-build -o artifacts
 
     - name: Upload NuGet package
-      uses: actions/upload-artifact@v4
+      uses: actions/upload-artifact@v7
       with:
         name: nuget-package
-        path: src/Agility.NET.FetchAPI/bin/Release/*.nupkg
+        path: artifacts/
