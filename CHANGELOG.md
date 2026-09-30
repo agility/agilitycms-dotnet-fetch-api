@@ -2,7 +2,7 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
-## [3.1.0] - Unreleased
+## [3.1.0] - 2026-09-30
 
 ### Fixed
 
@@ -17,6 +17,11 @@ This project follows [Semantic Versioning](https://semver.org/).
 - GraphQL requests go through the service's `HttpClient`, so handlers configured with `AddHttpClient` apply to them.
 - Source Link and a symbol package.
 - Releases publish from CI on a version tag, using NuGet Trusted Publishing.
+
+### Changed
+
+- `LICENSE` now holds the MIT text, matching the package metadata (`PackageLicenseExpression: MIT`) and the README.
+  It previously contained the GPL-3.0 text by mistake.
 
 ### Removed
 
