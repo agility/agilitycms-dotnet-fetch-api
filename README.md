@@ -304,6 +304,8 @@ Its tests call a real instance, so configure these repository secrets:
 2. Merge to `main`, then tag it: `git tag v3.1.0 && git push origin v3.1.0`.
 3. The *Release* workflow checks that the tag matches the version, builds, tests, packs, and (after approval in the
    `nuget` environment) publishes to NuGet with Trusted Publishing: no API key is stored anywhere.
+4. It then creates the GitHub release for the tag, with the version's `CHANGELOG.md` section as the notes and the
+   `.nupkg` and `.snupkg` attached. A tag with no `CHANGELOG.md` entry fails before anything is published.
 
 ## Integration with Agility .NET Starter
 
