@@ -2,6 +2,15 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
+## [Unreleased]
+
+### Added
+
+- GEO / AEO properties on pages: `PageResponse.Geo` (`SchemaType`, `Summary`, `StructuredData` as raw JSON in a
+  `JsonElement?`, and `Ai` with `LlmsInclude` and `Crawl`), and four new `SEO` properties for pages: `Title`,
+  `CanonicalUrl`, `Robots` (`Index`, `Follow`) and `OgImage`. Each is `null` when the API doesn't send it, which is
+  the case until the Fetch API's GEO release and for any page without the data.
+
 ## [3.1.0] - 2026-09-30
 
 ### Fixed

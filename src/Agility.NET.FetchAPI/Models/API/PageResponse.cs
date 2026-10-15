@@ -17,6 +17,7 @@ namespace Agility.NET.FetchAPI.Models.API
         public bool ExcludeFromOutputCache { get; set; }
         public Visible Visible { get; set; }
         public SEO SEO { get; set; }
+        public Geo Geo { get; set; }
         public Scripts Scripts { get; set; }
         public Dynamic Dynamic { get; set; }
         public bool IsDynamicPage { get; set; }
@@ -40,6 +41,7 @@ namespace Agility.NET.FetchAPI.Models.API
             ExcludeFromOutputCache = pageResponse.ExcludeFromOutputCache;
             Visible = pageResponse.Visible;
             SEO = pageResponse.SEO;
+            Geo = pageResponse.Geo;
             Scripts = pageResponse.Scripts;
             Dynamic = pageResponse.Dynamic;
             IsDynamicPage = pageResponse.IsDynamicPage;
@@ -59,6 +61,7 @@ namespace Agility.NET.FetchAPI.Models.API
         public bool ExcludeFromOutputCache { get; set; }
         public Visible Visible { get; set; }
         public SEO SEO { get; set; }
+        public Geo Geo { get; set; }
         public Scripts Scripts { get; set; }
         public Dynamic Dynamic { get; set; }
         public bool IsDynamicPage { get; set; }
