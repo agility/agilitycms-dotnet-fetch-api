@@ -1,7 +1,7 @@
 ﻿namespace Agility.NET.FetchAPI.Models
 {
     /// <summary>A page's robots directives. Each is null when not set.</summary>
-    public class Robots
+    public class SeoRobots
     {
         /// <summary>Whether search engines may index the page.</summary>
         public bool? Index { get; set; }

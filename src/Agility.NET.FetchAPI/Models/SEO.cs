@@ -15,9 +15,12 @@
         public string CanonicalUrl { get; set; }
 
         /// <summary>The page's robots directives. Pages and dynamic page list items; null when not set.</summary>
-        public Robots Robots { get; set; }
+        public SeoRobots Robots { get; set; }
 
-        /// <summary>The URL of the page's social share (Open Graph) image. Pages and dynamic page list items; null when not set.</summary>
+        /// <summary>
+        /// The page's social share (Open Graph) image: an absolute http(s) URL or a site-relative path. Pages and dynamic
+        /// page list items; null when not set.
+        /// </summary>
         public string OgImage { get; set; }
     }
 }

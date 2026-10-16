@@ -7,7 +7,7 @@ namespace Agility.NET.FetchAPI.Models
     /// that backs a dynamic page. The API leaves out any property that isn't set, so each is null when not set, and
     /// the page's or item's <c>Geo</c> is null when it has none.
     /// </summary>
-    public class Geo
+    public class GeoProperties
     {
         /// <summary>
         /// The schema.org page type: <c>WebPage</c>, <c>AboutPage</c>, <c>ContactPage</c>, <c>CollectionPage</c>,
