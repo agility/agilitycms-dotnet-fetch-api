@@ -106,4 +106,55 @@ public class GeoTests
         Assert.Equal(JsonValueKind.Array, structuredData.ValueKind);
         Assert.Equal(2, structuredData.GetArrayLength());
     }
+
+    private const string ItemWithGeo = """
+        {
+          "contentID": 42,
+          "properties": { "state": 2, "versionID": 3, "referenceName": "posts", "definitionName": "Post", "itemOrder": 0 },
+          "fields": { "title": "A post" },
+          "seo": { "metaDescription": "The post", "metaKeywords": "", "metaHTML": "", "menuVisible": null, "sitemapVisible": null },
+          "geo": { "schemaType": "ItemPage", "summary": "The post in one sentence.",
+                   "structuredData": { "@type": "BlogPosting", "headline": "A post" },
+                   "ai": { "crawl": "block" } }
+        }
+        """;
+
+    private sealed class PostFields
+    {
+        public string? Title { get; set; }
+    }
+
+    [Fact]
+    public async Task A_dynamic_page_list_item_carries_its_geo_properties()
+    {
+        var item = await Service(ItemWithGeo).GetTypedContentItem<PostFields>(new GetItemParameters { Locale = "en-us", ContentId = 42 });
+
+        Assert.Equal("A post", item.Fields!.Title);
+        Assert.NotNull(item.Geo);
+        Assert.Equal("ItemPage", item.Geo!.SchemaType);
+        Assert.Equal("The post in one sentence.", item.Geo.Summary);
+        Assert.Equal("block", item.Geo.Ai.Crawl);
+        Assert.Null(item.Geo.Ai.LlmsInclude);
+        Assert.Equal("BlogPosting", item.Geo.StructuredData!.Value.GetProperty("@type").GetString());
+    }
+
+    [Fact]
+    public async Task An_item_without_geo_data_has_null_geo()
+    {
+        var item = await Service("""{ "contentID": 42, "fields": { "title": "A post" }, "seo": { "metaDescription": "The post" } }""")
+            .GetTypedContentItem<PostFields>(new GetItemParameters { Locale = "en-us", ContentId = 42 });
+
+        Assert.Equal(42, item.ContentID);
+        Assert.Null(item.Geo);
+    }
+
+    [Fact]
+    public async Task Typed_content_list_items_carry_geo()
+    {
+        var list = await Service($$"""{ "items": [{{ItemWithGeo}}, { "contentID": 43, "fields": { "title": "No GEO" } }], "totalCount": 2 }""")
+            .GetTypedContentList<PostFields>(new GetListParameters { Locale = "en-us", ReferenceName = "posts", Take = 10 });
+
+        Assert.Equal("ItemPage", list.Items[0].Geo.SchemaType);
+        Assert.Null(list.Items[1].Geo);
+    }
 }

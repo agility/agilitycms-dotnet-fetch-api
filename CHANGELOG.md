@@ -10,6 +10,8 @@ This project follows [Semantic Versioning](https://semver.org/).
   `JsonElement?`, and `Ai` with `LlmsInclude` and `Crawl`), and four new `SEO` properties for pages: `Title`,
   `CanonicalUrl`, `Robots` (`Index`, `Follow`) and `OgImage`. Each is `null` when the API doesn't send it, which is
   the case until the Fetch API's GEO release and for any page without the data.
+- `Geo` on content items (`ContentItem`, `GenericContentItem<T>`, so typed content lists, and
+  `ContentItemResponse<T>`), for items in a list that backs a dynamic page. `null` when the item has none.
 
 ## [3.1.0] - 2026-09-30
 

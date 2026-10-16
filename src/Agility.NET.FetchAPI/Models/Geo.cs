@@ -3,8 +3,9 @@
 namespace Agility.NET.FetchAPI.Models
 {
     /// <summary>
-    /// A page's GEO / AEO (generative and answer engine optimization) properties. The API leaves out any property
-    /// that isn't set, so each is null when not set, and the page's <c>Geo</c> is null when it has none.
+    /// The GEO / AEO (generative and answer engine optimization) properties of a page, or of a content item in a list
+    /// that backs a dynamic page. The API leaves out any property that isn't set, so each is null when not set, and
+    /// the page's or item's <c>Geo</c> is null when it has none.
     /// </summary>
     public class Geo
     {
