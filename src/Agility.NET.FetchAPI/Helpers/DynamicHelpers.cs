@@ -160,8 +160,12 @@ namespace Agility.NET.FetchAPI.Helpers
                     var deserializedContentItem = new ContentItemResponse<T>()
                     {
                         ContentID = contentItem.ContentID,
-                        Fields = JsonSerializer.Deserialize<T>(contentItem.Fields.ToString(), Constants.JsonSerializerOptions),
-                        Properties = contentItem.Properties
+                        // The string cast binds this call at compile time. Left dynamic, it's bound at run time from this
+                        // class's point of view, which fails for a T this assembly can't see (a private or internal type).
+                        Fields = JsonSerializer.Deserialize<T>((string)contentItem.Fields.ToString(), Constants.JsonSerializerOptions),
+                        Properties = contentItem.Properties,
+                        SEO = contentItem.SEO,
+                        Geo = contentItem.Geo
                     };
                     deserializedContentItems.Add(deserializedContentItem);
                 }

@@ -227,4 +227,20 @@ public class GeoTests
         Assert.Contains("\"StructuredData\":null", Newtonsoft.Json.JsonConvert.SerializeObject(new Models.GeoProperties()));
     }
 
+    [Fact]
+    public void Typed_sync_items_keep_their_seo_and_geo()
+    {
+        var sync = DynamicHelpers.DeserializeTo<Models.SyncContentItem>(
+            $$"""{ "syncToken": 5, "items": [{{ItemWithGeo}}, { "contentID": 43, "properties": { "definitionName": "Post" }, "fields": { "title": "No GEO" } }] }""");
+
+        var items = DynamicHelpers.DeserializeSyncItemsTo<PostFields>(sync.Items, "Post");
+
+        Assert.Equal(2, items.Count);
+        Assert.Equal("A post", items[0].Fields!.Title);
+        Assert.Equal("The post", items[0].SEO!.MetaDescription);
+        Assert.Equal("ItemPage", items[0].Geo!.SchemaType);
+        Assert.Equal("BlogPosting", items[0].Geo!.StructuredData!.Value.GetProperty("@type").GetString());
+        Assert.Null(items[1].SEO);
+        Assert.Null(items[1].Geo);
+    }
 }
