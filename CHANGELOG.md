@@ -2,16 +2,25 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
-## [Unreleased]
+## [3.2.0-beta.1]
 
 ### Added
 
-- GEO / AEO properties on pages: `PageResponse.Geo` (`SchemaType`, `Summary`, `StructuredData` as raw JSON in a
-  `JsonElement?`, and `Ai` with `LlmsInclude` and `Crawl`), and four new `SEO` properties for pages: `Title`,
-  `CanonicalUrl`, `Robots` (`Index`, `Follow`) and `OgImage`. Each is `null` when the API doesn't send it, which is
-  the case until the Fetch API's GEO release and for any page without the data.
+- GEO / AEO properties on pages: `PageResponse.Geo`, a `GeoProperties` with `SchemaType`, `Summary`,
+  `StructuredData` (the raw JSON-LD object or array, as a `JsonElement?`) and `Ai` (a `GeoAi` with `LlmsInclude` and
+  `Crawl`). Four new `SEO` properties: `Title`, `CanonicalUrl`, `Robots` (a `SeoRobots` with `Index` and `Follow`) and
+  `OgImage`. Each is `null` when the API doesn't send it, which is the case until the Fetch API's GEO release and for
+  any page without the data.
 - `Geo` on content items (`ContentItem`, `GenericContentItem<T>`, so typed content lists, and
-  `ContentItemResponse<T>`), for items in a list that backs a dynamic page. `null` when the item has none.
+  `ContentItemResponse<T>`, so typed items and `GetContentByGraphQL`), for items in a list that backs a dynamic page.
+  `null` when the item has none. `StructuredData` reads correctly through the GraphQL client, which uses
+  Newtonsoft.Json.
+
+### Fixed
+
+- `DynamicHelpers.DeserializeSyncItemsTo<T>` now copies each item's `SEO` (and the new `Geo`); it used to drop them.
+- `DynamicHelpers.DeserializeSyncItemsTo<T>` returned `null` when `T` was a type the SDK can't see, such as a private
+  or internal class.
 
 ## [3.1.0] - 2026-09-30
 
