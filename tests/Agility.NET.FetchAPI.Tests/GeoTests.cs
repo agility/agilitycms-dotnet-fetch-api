@@ -1,4 +1,4 @@
-using System.Net;
+﻿using System.Net;
 using System.Text;
 using System.Text.Json;
 using Xunit;
@@ -157,4 +157,74 @@ public class GeoTests
         Assert.Equal("ItemPage", list.Items[0].Geo.SchemaType);
         Assert.Null(list.Items[1].Geo);
     }
+
+    // GetContentByGraphQL deserializes with Newtonsoft.Json, not System.Text.Json.
+    private static Task<List<Models.API.ContentItemResponse<PostFields>>> GetByGraphQL(string itemJson) =>
+        Service($$"""{ "data": { "posts": [{{itemJson}}] } }""")
+            .GetContentByGraphQL<PostFields>("{ posts { contentID } }", "en-us", "posts");
+
+    [Fact]
+    public async Task GraphQL_reads_structured_data_as_an_object()
+    {
+        var items = await GetByGraphQL(ItemWithGeo.Replace(
+            "\"headline\": \"A post\"",
+            "\"headline\": \"A post\", \"datePublished\": \"2026-10-16T09:30:00+02:00\", \"ratingValue\": 4.10"));
+
+        var item = Assert.Single(items);
+        Assert.Equal("ItemPage", item.Geo!.SchemaType);
+        Assert.Equal("block", item.Geo.Ai.Crawl);
+        var structuredData = Assert.NotNull(item.Geo.StructuredData);
+        Assert.Equal(JsonValueKind.Object, structuredData.ValueKind);
+        Assert.Equal("BlogPosting", structuredData.GetProperty("@type").GetString());
+        // Date-like strings and numbers come through as written.
+        Assert.Equal("2026-10-16T09:30:00+02:00", structuredData.GetProperty("datePublished").GetString());
+        Assert.Equal("4.10", structuredData.GetProperty("ratingValue").GetRawText());
+    }
+
+    [Fact]
+    public async Task GraphQL_reads_structured_data_as_an_array()
+    {
+        var items = await GetByGraphQL(ItemWithGeo.Replace(
+            """{ "@type": "BlogPosting", "headline": "A post" }""",
+            """[{ "@type": "WebPage" }, { "@type": "BreadcrumbList" }]"""));
+
+        var structuredData = Assert.NotNull(Assert.Single(items).Geo!.StructuredData);
+        Assert.Equal(JsonValueKind.Array, structuredData.ValueKind);
+        Assert.Equal(2, structuredData.GetArrayLength());
+        Assert.Equal("BreadcrumbList", structuredData[1].GetProperty("@type").GetString());
+    }
+
+    [Fact]
+    public async Task GraphQL_reads_null_or_absent_structured_data_and_geo()
+    {
+        var withNull = Assert.Single(await GetByGraphQL(ItemWithGeo.Replace(
+            """{ "@type": "BlogPosting", "headline": "A post" }""", "null")));
+        Assert.NotNull(withNull.Geo);
+        Assert.Null(withNull.Geo!.StructuredData);
+
+        var absent = Assert.Single(await GetByGraphQL("""{ "contentID": 43, "geo": { "summary": "No JSON-LD." } }"""));
+        Assert.Equal("No JSON-LD.", absent.Geo!.Summary);
+        Assert.Null(absent.Geo.StructuredData);
+
+        var noGeo = Assert.Single(await GetByGraphQL("""{ "contentID": 44, "fields": { "title": "No GEO" } }"""));
+        Assert.Null(noGeo.Geo);
+    }
+
+    [Fact]
+    public void Newtonsoft_writes_structured_data_back_as_json()
+    {
+        var geo = new Models.GeoProperties
+        {
+            StructuredData = JsonDocument.Parse("""[{ "@type": "WebPage" }]""").RootElement.Clone(),
+        };
+
+        var json = Newtonsoft.Json.JsonConvert.SerializeObject(geo);
+        Assert.Contains("\"StructuredData\":[{\"@type\":\"WebPage\"}]", json);
+
+        var roundTripped = Newtonsoft.Json.JsonConvert.DeserializeObject<Models.GeoProperties>(json)!;
+        Assert.Equal(JsonValueKind.Array, roundTripped.StructuredData!.Value.ValueKind);
+
+        Assert.Contains("\"StructuredData\":null", Newtonsoft.Json.JsonConvert.SerializeObject(new Models.GeoProperties()));
+    }
+
 }

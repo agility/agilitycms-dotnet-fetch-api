@@ -1,4 +1,5 @@
 ﻿using System.Text.Json;
+using Agility.NET.FetchAPI.Converters;
 
 namespace Agility.NET.FetchAPI.Models
 {
@@ -21,6 +22,7 @@ namespace Agility.NET.FetchAPI.Models
         /// <summary>
         /// Editor-supplied JSON-LD, as raw JSON: an object (which may hold an <c>@graph</c>) or an array of objects.
         /// </summary>
+        [Newtonsoft.Json.JsonConverter(typeof(NewtonsoftJsonElementConverter))]
         public JsonElement? StructuredData { get; set; }
 
         /// <summary>The page's AI-engine settings.</summary>
