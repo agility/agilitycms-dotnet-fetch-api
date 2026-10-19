@@ -176,9 +176,23 @@ public class GeoTests
         var structuredData = Assert.NotNull(item.Geo.StructuredData);
         Assert.Equal(JsonValueKind.Object, structuredData.ValueKind);
         Assert.Equal("BlogPosting", structuredData.GetProperty("@type").GetString());
-        // Date-like strings and numbers come through as written.
+        // Date-like strings come through as written; numbers keep their value.
         Assert.Equal("2026-10-16T09:30:00+02:00", structuredData.GetProperty("datePublished").GetString());
-        Assert.Equal("4.10", structuredData.GetProperty("ratingValue").GetRawText());
+        Assert.Equal(4.1, structuredData.GetProperty("ratingValue").GetDouble());
+    }
+
+    [Fact]
+    public async Task GraphQL_reads_very_large_and_very_small_numbers_in_structured_data()
+    {
+        // Read as decimal, 1e30 is out of range and failed the whole response, and 1e-40 became 0.
+        var items = await GetByGraphQL(ItemWithGeo.Replace(
+            "\"headline\": \"A post\"",
+            "\"headline\": \"A post\", \"big\": 1e30, \"small\": 1e-40, \"price\": 19.99"));
+
+        var structuredData = Assert.NotNull(Assert.Single(items).Geo!.StructuredData);
+        Assert.Equal(1e30, structuredData.GetProperty("big").GetDouble());
+        Assert.Equal(1e-40, structuredData.GetProperty("small").GetDouble());
+        Assert.Equal(19.99, structuredData.GetProperty("price").GetDouble());
     }
 
     [Fact]

@@ -17,11 +17,12 @@ namespace Agility.NET.FetchAPI.Converters
 
         public override object ReadJson(JsonReader reader, Type objectType, object existingValue, Newtonsoft.Json.JsonSerializer serializer)
         {
-            // Read the value as written: no conversion of date-like strings or of number precision on the way through.
+            // Keep date-like strings as written. Read numbers as doubles: decimal would fail the whole response on a
+            // value above its range (1e30) and turn very small values (1e-40) into 0.
             var dateParseHandling = reader.DateParseHandling;
             var floatParseHandling = reader.FloatParseHandling;
             reader.DateParseHandling = DateParseHandling.None;
-            reader.FloatParseHandling = FloatParseHandling.Decimal;
+            reader.FloatParseHandling = FloatParseHandling.Double;
             JToken token;
             try
             {
