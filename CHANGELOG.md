@@ -2,7 +2,9 @@
 
 This project follows [Semantic Versioning](https://semver.org/).
 
-## [3.2.0-beta.1]
+## [3.2.0] - 2026-11-10
+
+First published as `3.2.0-beta.1` (2026-11-09); unchanged since.
 
 ### Added
 

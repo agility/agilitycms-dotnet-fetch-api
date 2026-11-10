@@ -24,7 +24,7 @@ dotnet add package Agility.NET.FetchAPI
 Or add to your `.csproj`:
 
 ```xml
-<PackageReference Include="Agility.NET.FetchAPI" Version="3.1.0" />
+<PackageReference Include="Agility.NET.FetchAPI" Version="3.2.0" />
 ```
 
 ## Requirements
